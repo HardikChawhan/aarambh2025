@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 
 // route for scanning the QR code
 router.post(
-  "/scanDay1",
+  "/scan",
   [
     body("email")
       .isEmail()
@@ -29,75 +29,7 @@ router.post(
     const { email } = req.body;
 
     try {
-      const result = await service.scanStudentDay1(email);
-
-      if (result) {
-        res.status(200).json({ message: "Student found", data: result });
-      } else {
-        res
-          .status(403)
-          .json({ message: "QR code already scanned or student not found" });
-      }
-    } catch (error) {
-      logger.error(`Error during scan: ${error.message}`);
-      res.status(500).json({ message: "An error occurred", error });
-    }
-  }
-);
-
-router.post(
-  "/scanDay2",
-  [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email is required")
-      .normalizeEmail(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      logger.warn(`Validation error: ${JSON.stringify(errors.array())}`);
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { email } = req.body;
-
-    try {
-      const result = await service.scanStudentDay2(email);
-
-      if (result) {
-        res.status(200).json({ message: "Student found", data: result });
-      } else {
-        res
-          .status(403)
-          .json({ message: "QR code already scanned or student not found" });
-      }
-    } catch (error) {
-      logger.error(`Error during scan: ${error.message}`);
-      res.status(500).json({ message: "An error occurred", error });
-    }
-  }
-);
-
-router.post(
-  "/scanFood",
-  [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email is required")
-      .normalizeEmail(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      logger.warn(`Validation error: ${JSON.stringify(errors.array())}`);
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { email } = req.body;
-
-    try {
-      const result = await service.scanStudentFood(email);
+      const result = await service.scanStudent(email);
 
       if (result) {
         res.status(200).json({ message: "Student found", data: result });
@@ -115,7 +47,7 @@ router.post(
 
 // Route to change status to NOTACTIVE
 router.post(
-  "/validateDay1",
+  "/validate",
   [
     body("email")
       .isEmail()
@@ -131,67 +63,7 @@ router.post(
     const { email } = req.body;
 
     try {
-      const result = await service.validateStudentDay1(email);
-      if (result) {
-        res.status(200).json({ message: "Status updated to NOTACTIVE" });
-      } else {
-        res.status(400).json({ message: "No active student found to update" });
-      }
-    } catch (error) {
-      logger.error(`Error during validation: ${error.message}`);
-      res.status(500).json({ message: "An error occurred", error });
-    }
-  }
-);
-
-router.post(
-  "/validateDay2",
-  [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email is required")
-      .normalizeEmail(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      logger.warn(`Validation error: ${JSON.stringify(errors.array())}`);
-      return res.status(400).json({ errors: errors.array() }); // Return validation errors
-    }
-    const { email } = req.body;
-
-    try {
-      const result = await service.validateStudentDay2(email);
-      if (result) {
-        res.status(200).json({ message: "Status updated to NOTACTIVE" });
-      } else {
-        res.status(400).json({ message: "No active student found to update" });
-      }
-    } catch (error) {
-      logger.error(`Error during validation: ${error.message}`);
-      res.status(500).json({ message: "An error occurred", error });
-    }
-  }
-);
-
-router.post(
-  "/validateFood",
-  [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email is required")
-      .normalizeEmail(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      logger.warn(`Validation error: ${JSON.stringify(errors.array())}`);
-      return res.status(400).json({ errors: errors.array() }); // Return validation errors
-    }
-    const { email } = req.body;
-
-    try {
-      const result = await service.validateStudentFood(email);
+      const result = await service.validateStudent(email);
       if (result) {
         res.status(200).json({ message: "Status updated to NOTACTIVE" });
       } else {

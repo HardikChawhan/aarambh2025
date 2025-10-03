@@ -1,57 +1,21 @@
 const dal = require("../DAL/dal");
 const bcrypt = require("bcrypt");
 
-async function scanStudentDay1(email) {
+async function scanStudent(email) {
   const sanitizedData = {
     email: sanitizeInput(email),
   };
 
-  const student = await dal.findActiveStudentDay1(sanitizedData);
+  const student = await dal.findActiveStudent(sanitizedData);
   return student;
 }
 
-async function scanStudentDay2(email) {
+async function validateStudent(email) {
   const sanitizedData = {
     email: sanitizeInput(email),
   };
 
-  const student = await dal.findActiveStudentDay2(sanitizedData);
-  return student;
-}
-
-async function scanStudentFood(email) {
-  const sanitizedData = {
-    email: sanitizeInput(email),
-  };
-
-  const student = await dal.findActiveStudentFood(sanitizedData);
-  return student;
-}
-
-async function validateStudentDay1(email) {
-  const sanitizedData = {
-    email: sanitizeInput(email),
-  };
-
-  const updated = await dal.updateStudentStatusDay1(sanitizedData);
-  return updated;
-}
-
-async function validateStudentDay2(email) {
-  const sanitizedData = {
-    email: sanitizeInput(email),
-  };
-
-  const updated = await dal.updateStudentStatusDay2(sanitizedData);
-  return updated;
-}
-
-async function validateStudentFood(email) {
-  const sanitizedData = {
-    email: sanitizeInput(email),
-  };
-
-  const updated = await dal.updateStudentStatusFood(sanitizedData);
+  const updated = await dal.updateStudentStatus(sanitizedData);
   return updated;
 }
 
@@ -121,12 +85,8 @@ function sanitizeInput(input) {
 }
 
 module.exports = {
-  scanStudentDay1,
-  scanStudentDay2,
-  scanStudentFood,
-  validateStudentDay1,
-  validateStudentDay2,
-  validateStudentFood,
+  scanStudent,
+  validateStudent,
   authenticateUser,
   addUser,
   changePassword,

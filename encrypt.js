@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 require('dotenv').config();
 
 const db = mysql.createConnection({
@@ -9,8 +9,8 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-const username = 'Pratik';
-const password = 'Pawar@9552'; // Replace with your desired password
+const username = 'hardik';
+const password = 'hardik'; // Replace with your desired password
 
 bcrypt.hash(password, 10, (err, hashedPassword) => {
   if (err) {

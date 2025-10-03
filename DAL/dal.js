@@ -1,45 +1,9 @@
 const db = require("../db");
 
 // Finding active student by name, and email
-async function findActiveStudentDay1({ email }) {
+async function findActiveStudent({ email }) {
   const query =
-    'SELECT * FROM users WHERE email = ? AND statusday1 = "ACTIVE"';
-  return new Promise((resolve, reject) => {
-    db.query(query, [email], (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-
-      if (result.length > 0) {
-        resolve(result[0]);
-      } else {
-        resolve(null);
-      }
-    });
-  });
-}
-
-async function findActiveStudentDay2({ email }) {
-  const query =
-    'SELECT * FROM users WHERE email = ? AND statusday2 = "ACTIVE"';
-  return new Promise((resolve, reject) => {
-    db.query(query, [email], (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-
-      if (result.length > 0) {
-        resolve(result[0]);
-      } else {
-        resolve(null);
-      }
-    });
-  });
-}
-
-async function findActiveStudentFood({ email }) {
-  const query =
-    'SELECT * FROM users WHERE email = ? AND statusfood = "ACTIVE"';
+    'SELECT * FROM users WHERE email = ? AND status = "ACTIVE"';
   return new Promise((resolve, reject) => {
     db.query(query, [email], (err, result) => {
       if (err) {
@@ -56,39 +20,9 @@ async function findActiveStudentFood({ email }) {
 }
 
 // Updating student status to NOTACTIVE
-async function updateStudentStatusDay1({ email }) {
+async function updateStudentStatus({ email }) {
   const query =
-    'UPDATE users SET statusday1 = "NOTACTIVE" WHERE email = ? AND statusday1 = "ACTIVE"';
-
-  return new Promise((resolve, reject) => {
-    db.query(query, [email], (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(result.affectedRows > 0);
-    });
-  });
-}
-
-async function updateStudentStatusDay2({ email }) {
-  const query =
-    'UPDATE users SET statusday2 = "NOTACTIVE" WHERE email = ? AND statusday2 = "ACTIVE"';
-
-  return new Promise((resolve, reject) => {
-    db.query(query, [email], (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(result.affectedRows > 0);
-    });
-  });
-}
-
-async function updateStudentStatusFood({ email }) {
-  const query =
-    'UPDATE users SET statusfood = "NOTACTIVE" WHERE email = ? AND statusfood = "ACTIVE"';
+    'UPDATE users SET status = "NOTACTIVE" WHERE email = ? AND status = "ACTIVE"';
 
   return new Promise((resolve, reject) => {
     db.query(query, [email], (err, result) => {
@@ -176,12 +110,8 @@ async function fetchAccessUsers() {
 }
 
 module.exports = {
-  findActiveStudentDay1,
-  findActiveStudentDay2,
-  findActiveStudentFood,
-  updateStudentStatusDay1,
-  updateStudentStatusDay2,
-  updateStudentStatusFood,
+  findActiveStudent,
+  updateStudentStatus,
   findAdminByUsername,
   findUserByUsername,
   addUser,
