@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 // setting up connection for rds
 const db = mysql.createConnection({
