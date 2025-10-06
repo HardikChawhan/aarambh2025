@@ -10,11 +10,17 @@ const controller = require('./Controller/controller');
 // Get the number of CPU cores
 const numCPUs = os.cpus().length;
 
+// Limit workers on cloud platforms to avoid DB connection exhaustion
+// On Render, use fewer workers to stay within connection limits
+const isProduction = process.env.NODE_ENV === 'production';
+const maxWorkers = isProduction ? 2 : Math.min(numCPUs, 4);
+
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
+  console.log(`Starting ${maxWorkers} workers...`);
 
-  // Fork workers for each CPU core
-  for (let i = 0; i < numCPUs; i++) {
+  // Fork workers (limited to avoid DB connection pool exhaustion)
+  for (let i = 0; i < maxWorkers; i++) {
     cluster.fork();
   }
 
@@ -28,6 +34,7 @@ if (cluster.isMaster) {
   // Worker processes handle incoming requests
   const app = express();
   const PORT = process.env.PORT || 8001;
+  const HOST = process.env.HOST || '0.0.0.0'; // Bind to 0.0.0.0 for cloud deployments
 
   // Use helmet for security
   app.use(helmet());
@@ -61,8 +68,8 @@ if (cluster.isMaster) {
   });
 
   // Start the server
-  app.listen(PORT, () => {
-    console.log(`Worker process ${process.pid} is running on http://localhost:${PORT}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`Worker process ${process.pid} is running on http://${HOST}:${PORT}`);
   });
 
   // Graceful shutdown of workers
